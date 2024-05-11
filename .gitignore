@@ -28,6 +28,6 @@ go.work.sum
 
 internal/adapter/infra/config/configs.yaml
 
-#/src/external/api/infra/config/configs.yaml
+/src/external/api/infra/config/configs.yaml.old
 
 /tmp

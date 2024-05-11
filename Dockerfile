@@ -21,6 +21,8 @@ WORKDIR /app
 
 COPY --from=builder /app/fiap-tech-fast-food /app/fiap-tech-fast-food
 
+COPY --from=builder /app/src/external/api/infra/config/configs.yaml.sample /app/data/configs/configs.yaml
+
 EXPOSE 8080
 
 ENTRYPOINT ["/app/fiap-tech-fast-food"]

@@ -59,7 +59,7 @@ func setupConfig() *Config {
 		var appConfig Config
 
 		root, _ := find.Repo()
-		configFilePath := path.Join(root.Path, "/src/external/api/infra/config/configs.yaml")
+		configFilePath := path.Join(root.Path, "/src/external/api/infra/config")
 
 		viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 		viper.AutomaticEnv()
@@ -69,7 +69,11 @@ func setupConfig() *Config {
 		viper.AddConfigPath("/app/data/configs")
 		err := viper.ReadInConfig()
 
-		if err = viper.ReadInConfig(); err != nil {
+		//if err = viper.ReadInConfig(); err != nil {
+		//	panic(fmt.Errorf("Falha ao carregar as configurações: %w \n", err))
+		//}
+
+		if err != nil && !allConfigsAreSet() {
 			panic(fmt.Errorf("Falha ao carregar as configurações: %w \n", err))
 		}
 
