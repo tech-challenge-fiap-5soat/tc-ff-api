@@ -1,0 +1,478 @@
+basePath: /
+definitions:
+  github_com_hcsouza_fiap-tech-fast-food_src_common_dto.CreateCheckout:
+    properties:
+      checkout_url:
+        type: string
+      message:
+        type: string
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_common_dto.CustomerCreateDTO:
+    properties:
+      cpf:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+    required:
+    - cpf
+    - email
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_common_dto.OrderCreateDTO:
+    properties:
+      customer:
+        type: string
+      orderItems:
+        items:
+          $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_common_dto.OrderItemDTO'
+        type: array
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_common_dto.OrderItemDTO:
+    properties:
+      product:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_common_dto.OrderUpdateDTO:
+    properties:
+      customer:
+        type: string
+      orderItems:
+        items:
+          $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_common_dto.OrderItemDTO'
+        type: array
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_common_dto.UpdateCheckoutDTO:
+    properties:
+      status:
+        type: string
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Customer:
+    properties:
+      cpf:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Order:
+    properties:
+      _id:
+        type: string
+      amount:
+        type: number
+      createdAt:
+        $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_valueObject.CustomTime'
+      customer:
+        $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Customer'
+      orderItems:
+        items:
+          $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.OrderItem'
+        type: array
+      orderStatus:
+        $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_valueObject.OrderStatus'
+      updatedAt:
+        $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_valueObject.CustomTime'
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_core_entity.OrderItem:
+    properties:
+      product:
+        $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Product'
+      quantity:
+        type: integer
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Product:
+    properties:
+      _id:
+        type: string
+      category:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_core_valueObject.CustomTime:
+    properties:
+      time.Time:
+        type: string
+    type: object
+  github_com_hcsouza_fiap-tech-fast-food_src_core_valueObject.OrderStatus:
+    enum:
+    - STARTED
+    - PAYMENT_PENDING
+    - PAYMENT_APPROVED
+    - PAYMENT_REFUSED
+    - PREPARING
+    - READY
+    - COMPLETED
+    type: string
+    x-enum-varnames:
+    - ORDER_STARTED
+    - ORDER_PAYMENT_PENDING
+    - ORDER_PAYMENT_APPROVED
+    - ORDER_PAYMENT_REFUSED
+    - ORDER_BEING_PREPARED
+    - ORDER_READY
+    - ORDER_COMPLETED
+host: localhost:8080
+info:
+  contact: {}
+  description: Fast Food API for FIAP Tech course
+  title: Fast Food API
+  version: 0.1.0
+paths:
+  /api/v1/checkout/:id:
+    post:
+      consumes:
+      - application/json
+      description: Create checkout from order
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_common_dto.CreateCheckout'
+      summary: Create checkout from order
+      tags:
+      - Checkout Routes
+  /api/v1/checkout/:id/callback:
+    post:
+      consumes:
+      - application/json
+      description: Update checkout callback
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Order payment result status: approved, refused.'
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_common_dto.UpdateCheckoutDTO'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: object
+      summary: Update checkout callback
+      tags:
+      - Checkout Routes
+  /api/v1/customer:
+    get:
+      consumes:
+      - application/json
+      description: Get customer by CPF
+      parameters:
+      - description: "19119119100"
+        in: query
+        name: cpf
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Customer'
+            type: array
+      summary: Get customer by CPF
+      tags:
+      - Customer Routes
+    post:
+      consumes:
+      - application/json
+      description: Create a new customer
+      parameters:
+      - description: Customer information
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_common_dto.CustomerCreateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Customer'
+      summary: Create a new customer
+      tags:
+      - Customer Routes
+  /api/v1/order:
+    get:
+      consumes:
+      - application/json
+      description: Get all orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Order'
+            type: array
+      summary: Get all orders
+      tags:
+      - Order Routes
+    post:
+      consumes:
+      - application/json
+      description: Create new order
+      parameters:
+      - description: Order information and customer CPF
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_common_dto.OrderCreateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+      summary: Create new order
+      tags:
+      - Order Routes
+  /api/v1/order/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Order'
+      summary: Get order by ID
+      tags:
+      - Order Routes
+    put:
+      consumes:
+      - application/json
+      description: Update order
+      parameters:
+      - description: Order information and customer CPF
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_common_dto.OrderUpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Update order
+      tags:
+      - Order Routes
+  /api/v1/order/{id}/status/{status}:
+    put:
+      consumes:
+      - application/json
+      description: Update order status
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: STARTED, PREPARING, READY or COMPLETED
+        in: path
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Update order status
+      tags:
+      - Order Routes
+  /api/v1/order/status/{status}:
+    get:
+      consumes:
+      - application/json
+      description: Get all orders by status
+      parameters:
+      - description: STARTED, PAYMENT_PENDING, PAYMENT_APPROVED, PAYMENT_REFUSED,
+          PREPARING, READY or COMPLETED
+        in: path
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Order'
+            type: array
+      summary: Get all orders by status
+      tags:
+      - Order Routes
+  /api/v1/product:
+    get:
+      consumes:
+      - application/json
+      description: Get all products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Product'
+            type: array
+      summary: Get all products
+      tags:
+      - Product Routes
+    post:
+      consumes:
+      - application/json
+      description: Create new product
+      parameters:
+      - description: Product information
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create new product
+      tags:
+      - Product Routes
+  /api/v1/product/{category}:
+    get:
+      consumes:
+      - application/json
+      description: Get all products by category
+      parameters:
+      - description: acompanhamento, bebida, lanche or sobremesa
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Product'
+            type: array
+      summary: Get all products by category
+      tags:
+      - Product Routes
+  /api/v1/product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete product
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete product
+      tags:
+      - Product Routes
+    put:
+      consumes:
+      - application/json
+      description: Update product
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product information
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hcsouza_fiap-tech-fast-food_src_core_entity.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update product
+      tags:
+      - Product Routes
+  /health/liveness:
+    get:
+      description: Liveness probe
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Liveness probe
+      tags:
+      - Health Routes
+  /health/readiness:
+    get:
+      description: Readiness probe
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Readiness probe
+      tags:
+      - Health Routes
+swagger: "2.0"

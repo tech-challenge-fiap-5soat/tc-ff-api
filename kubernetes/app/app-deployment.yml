@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fiap-tech-fast-food-app
+  labels:
+    app: fiap-tech-fast-food-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fiap-tech-fast-food-app
+  template:
+    metadata:
+      name: fiap-tech-fast-food-app
+      labels:
+        app: fiap-tech-fast-food-app
+    spec:
+      containers:
+        - name: fiap-tech-fast-food-container
+          image: DOCKER_IMAGE
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 600M
+              cpu: 200m
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 3
+            initialDelaySeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health/liveness
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 3
+          env:
+#            - name: MONGODB_HOST
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: app-config
+#                  key: MONGODB_HOST
+#            - name: MONGODB_PORT
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: app-config
+#                  key: MONGODB_PORT
+#            - name: MONGODB_DATABASE
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: app-config
+#                  key: MONGODB_DATABASE
+            - name: API_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: API_PORT
