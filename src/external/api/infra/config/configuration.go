@@ -19,8 +19,8 @@ var (
 )
 
 type Config struct {
-	MongoCfg MongoConfig `mapstructure:"mongodb"`
-	ApiCfg   Api         `mapstructure:"api"`
+	MongoCfg MongoConfig `yaml:"mongodb"`
+	ApiCfg   Api         `yaml:"api"`
 }
 
 type MongoConfig struct {
@@ -31,15 +31,15 @@ type MongoConfig struct {
 }
 
 type Api struct {
-	Port                 string     `mapstructure:"port"`
-	AuthConfig           AuthConfig `mapstructure:"authconfig"`
-	AuthorizationBaseUrl string     `mapstructure:"authorizationUrl"`
+	Port                 string     `yaml:"port"`
+	AuthConfig           AuthConfig `yaml:"authConfig"`
+	AuthorizationBaseUrl string     `yaml:"authorizationUrl"`
 }
 
 type AuthConfig struct {
-	UserPoolId string
-	ClientId   string
-	TokenUse   string
+	UserPoolId string `yaml:"userPoolId"`
+	ClientId   string `yaml:"clientId"`
+	TokenUse   string `yaml:"tokenUse"`
 }
 
 func init() {
@@ -59,14 +59,14 @@ func setupConfig() *Config {
 		var appConfig Config
 
 		root, _ := find.Repo()
-		configFilePath := path.Join(root.Path, "/src/external/api/infra/config")
+		configFilePath := path.Join(root.Path, "/src/external/api/infra/config/configs.yaml")
 
 		viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 		viper.AutomaticEnv()
 		viper.SetConfigName("configs")
 		viper.SetConfigType("yaml")
 		viper.AddConfigPath(configFilePath)
-		//viper.AddConfigPath("/app/data/configs")
+		viper.AddConfigPath("/app/data/configs")
 		err := viper.ReadInConfig()
 
 		if err = viper.ReadInConfig(); err != nil {
@@ -89,6 +89,10 @@ func setupConfig() *Config {
 			appConfig.MongoCfg.Database = viper.Get("mongodb.database").(string)
 			appConfig.MongoCfg.User = viper.Get("mongodb.user").(string)
 			appConfig.MongoCfg.Pass = viper.Get("mongodb.pass").(string)
+			appConfig.ApiCfg.AuthConfig.UserPoolId = viper.Get("api.authConfig.userPoolId").(string)
+			appConfig.ApiCfg.AuthConfig.ClientId = viper.Get("api.authConfig.clientId").(string)
+			appConfig.ApiCfg.AuthConfig.TokenUse = viper.Get("api.authConfig.tokenUse").(string)
+
 		}
 
 		config = &appConfig
@@ -102,7 +106,10 @@ func allConfigsAreSet() bool {
 		viper.Get("mongodb.database") != nil &&
 		viper.Get("mongodb.user") != nil &&
 		viper.Get("api.port") != nil &&
-		viper.Get("mongodb.pass") != nil
+		viper.Get("mongodb.pass") != nil &&
+		viper.Get("api.authConfig.userPoolId") != nil &&
+		viper.Get("api.authConfig.clientId") != nil &&
+		viper.Get("api.authConfig.tokenUse") != nil
 }
 
 func replaceEnvInConfig(body []byte) []byte {
