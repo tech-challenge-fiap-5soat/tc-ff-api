@@ -1,0 +1,13 @@
+mongodb:
+  # use docker-nameservice or use the mongodb ip host
+  host: ${ATLAS_DB_HOST}
+  database: ${ATLAS_APP}
+  user: ${ATLAS_DB_USER}
+  pass: ${ATLAS_DB_PASS}
+api:
+  port: "8080"
+  authconfig:
+   userPoolId: "pooldID"
+   clientId:   "cid"
+   tokenUse:   "access"
+  authorizationUrl: "https://apigateway.com/default/food-fiap-auth"
