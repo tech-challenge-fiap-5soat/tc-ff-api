@@ -40,21 +40,26 @@ spec:
             failureThreshold: 5
             initialDelaySeconds: 3
           env:
-#            - name: MONGODB_HOST
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: app-config
-#                  key: MONGODB_HOST
-#            - name: MONGODB_PORT
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: app-config
-#                  key: MONGODB_PORT
-#            - name: MONGODB_DATABASE
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: app-config
-#                  key: MONGODB_DATABASE
+            - name: USER_POOL_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: USER_POOL_ID
+            - name: CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: CLIENT_ID
+            - name: TOKEN_USE
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: TOKEN_USE
+            - name: AUTHORIZATION_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: AUTHORIZATION_URL
             - name: API_PORT
               valueFrom:
                 configMapKeyRef:

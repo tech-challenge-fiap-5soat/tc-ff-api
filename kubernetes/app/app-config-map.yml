@@ -7,3 +7,7 @@ data:
 #  MONGODB_PORT: "27017"
 #  MONGODB_DATABASE: "db"
   API_PORT: "8080"
+  USER_POOL_ID: "poolID"
+  CLIENT_ID: "cid"
+  TOKEN_USE: "access"
+  AUTHORIZATION_URL: "https://apigateway.com/default/food-fiap-auth"
