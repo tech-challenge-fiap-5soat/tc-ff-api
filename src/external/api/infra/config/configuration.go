@@ -66,7 +66,7 @@ func setupConfig() *Config {
 		viper.SetConfigName("configs")
 		viper.SetConfigType("yaml")
 		viper.AddConfigPath(configFilePath)
-		viper.AddConfigPath("/app/data/configs")
+		//viper.AddConfigPath("/app/data/configs")
 		err := viper.ReadInConfig()
 
 		if err = viper.ReadInConfig(); err != nil {
