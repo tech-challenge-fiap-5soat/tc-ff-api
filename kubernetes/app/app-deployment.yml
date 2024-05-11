@@ -39,30 +39,26 @@ spec:
             periodSeconds: 10
             failureThreshold: 5
             initialDelaySeconds: 3
-          volumeMounts:
-            - mountPath: "/mnt/secrets-store"
-              name: secrets-store-inline
-              readOnly: true
           env:
             - name: ATLAS_APP
               valueFrom:
-                secretKeyRef:
-                  name: fast-food-tech-challenge
+                configMapKeyRef:
+                  name: app-config
                   key: ATLAS_APP
             - name: ATLAS_DB_HOST
               valueFrom:
-                secretKeyRef:
-                  name: fast-food-tech-challenge
+                configMapKeyRef:
+                  name: app-config
                   key: ATLAS_DB_HOST
             - name: ATLAS_DB_USER
               valueFrom:
-                secretKeyRef:
-                  name: fast-food-tech-challenge
+                configMapKeyRef:
+                  name: app-config
                   key: ATLAS_DB_USER
             - name: ATLAS_DB_PASS
               valueFrom:
-                secretKeyRef:
-                  name: fast-food-tech-challenge
+                configMapKeyRef:
+                  name: app-config
                   key: ATLAS_DB_PASS
 
             - name: USER_POOL_ID
