@@ -96,6 +96,7 @@ func setupConfig() *Config {
 			appConfig.ApiCfg.AuthConfig.UserPoolId = viper.Get("api.authConfig.userPoolId").(string)
 			appConfig.ApiCfg.AuthConfig.ClientId = viper.Get("api.authConfig.clientId").(string)
 			appConfig.ApiCfg.AuthConfig.TokenUse = viper.Get("api.authConfig.tokenUse").(string)
+			appConfig.ApiCfg.AuthorizationBaseUrl = viper.Get("api.authorizationUrl").(string)
 
 		}
 
@@ -113,7 +114,8 @@ func allConfigsAreSet() bool {
 		viper.Get("mongodb.pass") != nil &&
 		viper.Get("api.authConfig.userPoolId") != nil &&
 		viper.Get("api.authConfig.clientId") != nil &&
-		viper.Get("api.authConfig.tokenUse") != nil
+		viper.Get("api.authConfig.tokenUse") != nil &&
+		viper.Get("api.authorizationUrl") != nil
 }
 
 func replaceEnvInConfig(body []byte) []byte {
