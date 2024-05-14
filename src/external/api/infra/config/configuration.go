@@ -114,7 +114,8 @@ func allConfigsAreSet() bool {
 		viper.Get("mongodb.pass") != nil &&
 		viper.Get("api.authConfig.userPoolId") != nil &&
 		viper.Get("api.authConfig.clientId") != nil &&
-		viper.Get("api.authConfig.tokenUse") != nil
+		viper.Get("api.authConfig.tokenUse") != nil &&
+		viper.Get("api.authorizationUrl") != nil
 }
 
 func replaceEnvInConfig(body []byte) []byte {
