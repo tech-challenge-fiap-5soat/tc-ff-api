@@ -14,7 +14,7 @@ func Run(gServer *gin.Engine, dbClient mongo.Client) {
 	gServer.Use(
 		gin.LoggerWithWriter(gin.DefaultWriter, "/health/liveness", "/health/readiness"),
 		middlewares.CORSMiddleware(),
-		middlewares.CheckAccessToken("/api/v1/customer/authorization"),
+		middlewares.CheckAccessToken("/api/v1/customer/authorization", "/health/liveness", "/health/readiness", "/docs/*"),
 		gin.Recovery(),
 	)
 
